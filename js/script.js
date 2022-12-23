@@ -1,0 +1,229 @@
+class Slider {
+  constructor({
+    slidesContainer = null,
+    slidesContainer2 = null,
+    slides = null,
+    next = null,
+    prev = null,
+    btnBlock = null,
+    slideIndex = 0,
+    transform = null,
+  } = {}) {
+    if (slidesContainer === null) {
+      // Если был задан только класс сдайдов
+      this.slides = document.querySelectorAll(slides); // Получаем коллекцию слайдов
+    } else {
+      this.slidesContainer =
+        document.querySelector(slidesContainer); // Если был задан сонтейнер со сдайдами то получаем сначала его
+      this.slides = this.slidesContainer.children; // Получаем все слайды из контейнера
+    }
+
+    if (slidesContainer2 === null) {
+      // Если был задан только класс сдайдов
+      this.slides2 = document.querySelectorAll(slides); // Получаем коллекцию слайдов
+    } else {
+      this.slidesContainer2 = document.querySelector(
+        slidesContainer2
+      ); // Если был задан сонтейнер со сдайдами то получаем сначала его
+      this.slides2 = this.slidesContainer2.children; // Получаем все слайды из контейнера
+    }
+
+    this.next = document.querySelector(next); // Получаем кнопку вперед
+    this.prev = document.querySelector(prev); // Получаем кнопку назад
+    this.btnBlock = document.querySelectorAll(btnBlock);
+    this.count = 1; // Шаг переключения слайдов
+    this.transform = transform; // Скорость анимации переключения слайдов в милисекундах
+    this.slideIndex = slideIndex; // Задаём индекс первого слайда по умолчанию 0 (первый слайд)
+
+    // this.slides.length.forEach();
+
+    if (this.slideIndex === slideIndex) {
+      this.slideIndex2 =
+        this.slides.length - (slideIndex + 1); // Задаём индекс первого слайда по умолчанию 0 (первый слайд)
+    }
+  }
+
+  showSlide() {
+    if (this.slideIndex < 0) {
+      this.slideIndex = this.slides.length - 1;
+      this.slideIndex2 = 0;
+    }
+    if (this.slideIndex > this.slides.length - 1) {
+      this.slideIndex = 0;
+      this.slideIndex2 = this.slides2.length - 1;
+    }
+
+    for (let i = 0; i < this.slides.length; i++) {
+      this.slides[i].style.transform = "translateY(0%)";
+      this.slides[i].style.zIndex = 0;
+      //
+      this.slides2[i].style.transform = "translateY(0%)";
+      this.slides2[i].style.zIndex = 0;
+    }
+
+    if (this.slideIndex === this.slides.length - 1) {
+      // this.slideIndex2 === 0
+      this.slides[0].style.transform = "translateY(-100%)";
+      this.slides2[this.slideIndex2 + 1].style.transform =
+        "translateY(-100%)";
+      //
+      this.slides[this.slideIndex - 1].style.transform =
+        "translateY(100%)";
+      this.slides2[
+        this.slides2.length - 1
+      ].style.transform = "translateY(100%)";
+      //
+    } else if (this.slideIndex === 0) {
+      // this.slideIndex2 === this.slides.length - 1
+      this.slides[this.slideIndex + 1].style.transform =
+        "translateY(-100%)";
+      this.slides2[0].style.transform = "translateY(-100%)";
+      //
+      this.slides[this.slides.length - 1].style.transform =
+        "translateY(100%)";
+      this.slides2[this.slideIndex2 - 1].style.transform =
+        "translateY(100%)";
+      //
+    } else {
+      this.slides[this.slideIndex + 1].style.transform =
+        "translateY(-100%)";
+      this.slides2[this.slideIndex2 + 1].style.transform =
+        "translateY(-100%)";
+      //
+      this.slides[this.slideIndex - 1].style.transform =
+        "translateY(100%)";
+      this.slides2[this.slideIndex2 - 1].style.transform =
+        "translateY(100%)";
+    }
+
+    this.slides[this.slideIndex].style.zIndex = 10;
+    this.slides2[this.slideIndex2].style.zIndex = 10;
+  }
+
+  changeSlide(n, n2) {
+    this.slideIndex += n;
+    this.slideIndex2 += n2;
+    this.showSlide();
+  }
+
+  movementPrevSlide() {
+    this.changeSlide(-this.count, this.count);
+
+    if (this.slideIndex === this.slides.length - 1) {
+      //3
+      //0
+      this.slides[0].style.zIndex = 5;
+      this.slides2[
+        this.slides2.length - 1
+      ].style.zIndex = 5;
+      //
+      this.slides[this.slideIndex - 1].style.zIndex = 4;
+      this.slides2[this.slideIndex2 + 1].style.zIndex = 4;
+      //
+    } else if (this.slideIndex === 0) {
+      this.slides[this.slideIndex + 1].style.zIndex = 5;
+      this.slides2[0].style.zIndex = 4;
+      //
+      this.slides[this.slides.length - 1].style.zIndex = 4;
+      this.slides2[this.slideIndex2 - 1].style.zIndex = 5;
+      //
+    } else {
+      this.slides[this.slideIndex + 1].style.zIndex = 5; //2
+      this.slides2[this.slideIndex2 + 1].style.zIndex = 4; //1
+      //
+      this.slides[this.slideIndex - 1].style.zIndex = 4;
+      this.slides2[this.slideIndex2 - 1].style.zIndex = 5;
+    }
+  }
+
+  movementNextSlide() {
+    this.changeSlide(this.count, -this.count);
+
+    if (this.slideIndex === this.slides.length - 1) {
+      this.slides[0].style.zIndex = 4;
+      this.slides2[this.slideIndex2 + 1].style.zIndex = 5;
+      //
+      this.slides[this.slideIndex - 1].style.zIndex = 5;
+      this.slides2[
+        this.slides2.length - 1
+      ].style.zIndex = 4;
+      //
+    } else if (this.slideIndex === 0) {
+      this.slides[this.slideIndex + 1].style.zIndex = 4;
+      this.slides2[0].style.zIndex = 5;
+      //
+      this.slides[this.slides.length - 1].style.zIndex = 5;
+      this.slides2[this.slideIndex2 - 1].style.zIndex = 4;
+      //
+    } else {
+      this.slides[this.slideIndex + 1].style.zIndex = 4;
+      this.slides2[this.slideIndex2 + 1].style.zIndex = 5;
+      //
+      this.slides[this.slideIndex - 1].style.zIndex = 5;
+      this.slides2[this.slideIndex2 - 1].style.zIndex = 4;
+    }
+  }
+
+  disabledUp() {
+    if (!this.prev.hasAttribute("disabled")) {
+      this.movementPrevSlide();
+      this.prev.setAttribute("disabled", "disabled");
+      setTimeout(() => {
+        this.prev.removeAttribute("disabled");
+      }, this.transform);
+    }
+  }
+
+  disabledDown() {
+    if (!this.next.hasAttribute("disabled")) {
+      this.movementNextSlide();
+      this.next.setAttribute("disabled", "disabled");
+      setTimeout(() => {
+        this.next.removeAttribute("disabled");
+      }, this.transform);
+    }
+  }
+
+  keydown() {
+    document.addEventListener("keydown", (event) => {
+      if (event.key == "ArrowUp" || event.key == "w") {
+        this.disabledUp();
+      } else if (
+        event.key == "ArrowDown" ||
+        event.key == "s"
+      ) {
+        this.disabledDown();
+      }
+      console.log(event.key);
+    });
+  }
+
+  prevSlide() {
+    this.prev.addEventListener("click", () => {
+      this.disabledUp();
+    });
+  }
+
+  nextSlide() {
+    this.next.addEventListener("click", () => {
+      this.disabledDown();
+    });
+  }
+
+  render() {
+    this.showSlide();
+    this.prevSlide();
+    this.nextSlide();
+    this.keydown();
+  }
+}
+
+const slider = new Slider({
+  prev: ".up-button",
+  next: ".down-button",
+  slidesContainer: ".main-slide",
+  slidesContainer2: ".sidebar",
+  slideIndex: 2,
+  transform: 500,
+});
+slider.render();
