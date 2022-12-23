@@ -28,6 +28,7 @@ body {
   top: 0;
   left: 0;
   transition: transform 0.5s ease-in-out;
+  overflow: hidden;
 }
 
 .sidebar > div {
@@ -55,6 +56,7 @@ body {
   left: 30%;
   width: 70%;
   transition: transform 0.5s ease-in-out;
+  overflow: hidden;
 }
 
 .main-slide > div {

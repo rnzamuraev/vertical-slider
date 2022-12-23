@@ -3,11 +3,13 @@ class Slider {
     slidesContainer = null,
     slidesContainer2 = null,
     slides = null,
+    slides2 = null,
     next = null,
     prev = null,
     btnBlock = null,
     slideIndex = 0,
     transform = null,
+    direction = "Y",
   } = {}) {
     if (slidesContainer === null) {
       // Если был задан только класс сдайдов
@@ -20,7 +22,7 @@ class Slider {
 
     if (slidesContainer2 === null) {
       // Если был задан только класс сдайдов
-      this.slides2 = document.querySelectorAll(slides); // Получаем коллекцию слайдов
+      this.slides2 = document.querySelectorAll(slides2); // Получаем коллекцию слайдов
     } else {
       this.slidesContainer2 = document.querySelector(
         slidesContainer2
@@ -34,8 +36,7 @@ class Slider {
     this.count = 1; // Шаг переключения слайдов
     this.transform = transform; // Скорость анимации переключения слайдов в милисекундах
     this.slideIndex = slideIndex; // Задаём индекс первого слайда по умолчанию 0 (первый слайд)
-
-    // this.slides.length.forEach();
+    this.direction = direction; // Задаём направление движения слайдов по умолчанию ось - Y
 
     if (this.slideIndex === slideIndex) {
       this.slideIndex2 =
@@ -54,46 +55,59 @@ class Slider {
     }
 
     for (let i = 0; i < this.slides.length; i++) {
-      this.slides[i].style.transform = "translateY(0%)";
+      this.slides[
+        i
+      ].style.transform = `translate${this.direction}(0%)`;
       this.slides[i].style.zIndex = 0;
       //
-      this.slides2[i].style.transform = "translateY(0%)";
+      this.slides2[
+        i
+      ].style.transform = `translate${this.direction}(0%)`;
       this.slides2[i].style.zIndex = 0;
     }
 
     if (this.slideIndex === this.slides.length - 1) {
       // this.slideIndex2 === 0
-      this.slides[0].style.transform = "translateY(-100%)";
-      this.slides2[this.slideIndex2 + 1].style.transform =
-        "translateY(-100%)";
+      this.slides[0].style.transform = `translate${this.direction}(-100%)`;
+      this.slides2[
+        this.slideIndex2 + 1
+      ].style.transform = `translate${this.direction}(-100%)`;
       //
-      this.slides[this.slideIndex - 1].style.transform =
-        "translateY(100%)";
+      this.slides[
+        this.slideIndex - 1
+      ].style.transform = `translate${this.direction}(100%)`;
       this.slides2[
         this.slides2.length - 1
-      ].style.transform = "translateY(100%)";
+      ].style.transform = `translate${this.direction}(100%)`;
       //
     } else if (this.slideIndex === 0) {
       // this.slideIndex2 === this.slides.length - 1
-      this.slides[this.slideIndex + 1].style.transform =
-        "translateY(-100%)";
-      this.slides2[0].style.transform = "translateY(-100%)";
+      this.slides[
+        this.slideIndex + 1
+      ].style.transform = `translate${this.direction}(-100%)`;
+      this.slides2[0].style.transform = `translate${this.direction}(-100%)`;
       //
-      this.slides[this.slides.length - 1].style.transform =
-        "translateY(100%)";
-      this.slides2[this.slideIndex2 - 1].style.transform =
-        "translateY(100%)";
+      this.slides[
+        this.slides.length - 1
+      ].style.transform = `translate${this.direction}(100%)`;
+      this.slides2[
+        this.slideIndex2 - 1
+      ].style.transform = `translate${this.direction}(100%)`;
       //
     } else {
-      this.slides[this.slideIndex + 1].style.transform =
-        "translateY(-100%)";
-      this.slides2[this.slideIndex2 + 1].style.transform =
-        "translateY(-100%)";
+      this.slides[
+        this.slideIndex + 1
+      ].style.transform = `translate${this.direction}(-100%)`;
+      this.slides2[
+        this.slideIndex2 + 1
+      ].style.transform = `translate${this.direction}(-100%)`;
       //
-      this.slides[this.slideIndex - 1].style.transform =
-        "translateY(100%)";
-      this.slides2[this.slideIndex2 - 1].style.transform =
-        "translateY(100%)";
+      this.slides[
+        this.slideIndex - 1
+      ].style.transform = `translate${this.direction}(100%)`;
+      this.slides2[
+        this.slideIndex2 - 1
+      ].style.transform = `translate${this.direction}(100%)`;
     }
 
     this.slides[this.slideIndex].style.zIndex = 10;
@@ -110,8 +124,6 @@ class Slider {
     this.changeSlide(-this.count, this.count);
 
     if (this.slideIndex === this.slides.length - 1) {
-      //3
-      //0
       this.slides[0].style.zIndex = 5;
       this.slides2[
         this.slides2.length - 1
@@ -194,7 +206,6 @@ class Slider {
       ) {
         this.disabledDown();
       }
-      console.log(event.key);
     });
   }
 
@@ -224,6 +235,8 @@ const slider = new Slider({
   slidesContainer: ".main-slide",
   slidesContainer2: ".sidebar",
   slideIndex: 2,
+  // count: 1,
   transform: 500,
+  direction: "X",
 });
 slider.render();
