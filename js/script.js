@@ -10,6 +10,8 @@ class Slider {
     slideIndex = 0,
     transform = null,
     direction = "Y",
+    autoPlay = 5000,
+    play = false,
   } = {}) {
     if (slidesContainer === null) {
       // Если был задан только класс сдайдов
@@ -37,6 +39,8 @@ class Slider {
     this.transform = transform; // Скорость анимации переключения слайдов в милисекундах
     this.slideIndex = slideIndex; // Задаём индекс первого слайда по умолчанию 0 (первый слайд)
     this.direction = direction; // Задаём направление движения слайдов по умолчанию ось - Y
+    this.autoPlay = autoPlay; // Задаем время авто переключения слайдов
+    this.play = play; // Автопереключение слайдов по умолчанию выключено(False)
 
     if (this.slideIndex === slideIndex) {
       this.slideIndex2 =
@@ -45,14 +49,29 @@ class Slider {
   }
 
   showSlide() {
+    // if (this.count == 2) {
+    //   if (this.slideIndex - 1 < 0) {
+    //     this.slideIndex = this.slides.length - 2;
+    //     this.slideIndex2 = 1;
+    //   }
+    // } else {
     if (this.slideIndex < 0) {
       this.slideIndex = this.slides.length - 1;
       this.slideIndex2 = 0;
     }
+    // }
+
+    // if (this.count === 2) {
+    //   if (this.slideIndex + 1 > this.slides.length - 1) {
+    //     this.slideIndex = 1;
+    //     this.slideIndex2 = this.slides2.length - 2;
+    //   }
+    // } else {
     if (this.slideIndex > this.slides.length - 1) {
       this.slideIndex = 0;
       this.slideIndex2 = this.slides2.length - 1;
     }
+    // }
 
     for (let i = 0; i < this.slides.length; i++) {
       this.slides[
@@ -69,45 +88,106 @@ class Slider {
     if (this.slideIndex === this.slides.length - 1) {
       // this.slideIndex2 === 0
       this.slides[0].style.transform = `translate${this.direction}(-100%)`;
+      // this.slides[1].style.transform = `translate${this.direction}(-200%)`;
+
       this.slides2[
         this.slideIndex2 + 1
       ].style.transform = `translate${this.direction}(-100%)`;
+      // this.slides2[
+      // this.slideIndex2 + 2
+      // ].style.transform = `translate${this.direction}(-200%)`;
       //
       this.slides[
         this.slideIndex - 1
       ].style.transform = `translate${this.direction}(100%)`;
+      // this.slides[
+      // this.slideIndex - 2
+      // ].style.transform = `translate${this.direction}(200%)`;
+
       this.slides2[
         this.slides2.length - 1
       ].style.transform = `translate${this.direction}(100%)`;
+      // this.slides2[
+      // this.slides2.length - 2
+      // ].style.transform = `translate${this.direction}(200%)`;
       //
     } else if (this.slideIndex === 0) {
       // this.slideIndex2 === this.slides.length - 1
       this.slides[
         this.slideIndex + 1
       ].style.transform = `translate${this.direction}(-100%)`;
+      // this.slides[
+      // this.slideIndex + 2
+      // ].style.transform = `translate${this.direction}(-200%)`;
+
       this.slides2[0].style.transform = `translate${this.direction}(-100%)`;
+      // this.slides2[1].style.transform = `translate${this.direction}(-200%)`;
       //
       this.slides[
         this.slides.length - 1
       ].style.transform = `translate${this.direction}(100%)`;
+      // this.slides[
+      // this.slides.length - 2
+      // ].style.transform = `translate${this.direction}(200%)`;
+
       this.slides2[
         this.slideIndex2 - 1
       ].style.transform = `translate${this.direction}(100%)`;
+      // this.slides2[
+      // this.slideIndex2 - 2
+      // ].style.transform = `translate${this.direction}(200%)`;
       //
     } else {
       this.slides[
         this.slideIndex + 1
       ].style.transform = `translate${this.direction}(-100%)`;
+      // if (this.slideIndex + 1 === this.slides.length - 1) {
+      // this.slides[0].style.transform = `translate${this.direction}(-200%)`;
+      // } else {
+      // this.slides[
+      // this.slideIndex + 2
+      // ].style.transform = `translate${this.direction}(-200%)`;
+      // }
+
       this.slides2[
         this.slideIndex2 + 1
       ].style.transform = `translate${this.direction}(-100%)`;
+      // if (
+      // this.slideIndex2 + 1 ===
+      // this.slides2.length - 1
+      // ) {
+      // this.slides2[0].style.transform = `translate${this.direction}(-200%)`;
+      // } else {
+      // this.slides2[
+      // this.slideIndex2 + 2
+      // ].style.transform = `translate${this.direction}(-200%)`;
+      // }
       //
       this.slides[
         this.slideIndex - 1
       ].style.transform = `translate${this.direction}(100%)`;
+      // if (this.slideIndex - 1 === 0) {
+      // this.slides[
+      // this.slides.length - 1
+      // ].style.transform = `translate${this.direction}(200%)`;
+      // } else {
+      // this.slides[
+      // this.slideIndex - 2
+      // ].style.transform = `translate${this.direction}(200%)`;
+      // }
+
       this.slides2[
         this.slideIndex2 - 1
       ].style.transform = `translate${this.direction}(100%)`;
+      // if (this.slideIndex2 - 1 === 0) {
+      // this.slides2[
+      // this.slides2.length - 1
+      // ].style.transform = `translate${this.direction}(200%)`;
+      // } else {
+      // this.slides2[
+      // this.slideIndex2 - 2
+      // ].style.transform = `translate${this.direction}(200%)`;
+      // }
     }
 
     this.slides[this.slideIndex].style.zIndex = 10;
@@ -221,8 +301,17 @@ class Slider {
     });
   }
 
+  autoplay() {
+    if (this.play) {
+      setInterval(() => {
+        this.disabledDown();
+      }, this.autoPlay);
+    }
+  }
+
   render() {
     this.showSlide();
+    this.autoplay();
     this.prevSlide();
     this.nextSlide();
     this.keydown();
@@ -235,8 +324,10 @@ const slider = new Slider({
   slidesContainer: ".main-slide",
   slidesContainer2: ".sidebar",
   slideIndex: 2,
-  // count: 1,
+  count: 2,
   transform: 500,
-  direction: "X",
+  // direction: "X",
+  autoPlay: 10000,
+  // play: "true",
 });
 slider.render();
