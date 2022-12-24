@@ -8,10 +8,11 @@ class Slider {
     prev = null,
     btnBlock = null,
     slideIndex = 0,
-    transform = null,
+    transition = null,
     direction = "Y",
     autoPlay = 5000,
     play = false,
+    keydown = true,
   } = {}) {
     if (slidesContainer === null) {
       // Если был задан только класс сдайдов
@@ -36,42 +37,35 @@ class Slider {
     this.prev = document.querySelector(prev); // Получаем кнопку назад
     this.btnBlock = document.querySelectorAll(btnBlock);
     this.count = 1; // Шаг переключения слайдов
-    this.transform = transform; // Скорость анимации переключения слайдов в милисекундах
+    this.transition = transition; // Скорость анимации переключения слайдов в милисекундах
     this.slideIndex = slideIndex; // Задаём индекс первого слайда по умолчанию 0 (первый слайд)
     this.direction = direction; // Задаём направление движения слайдов по умолчанию ось - Y
     this.autoPlay = autoPlay; // Задаем время авто переключения слайдов
     this.play = play; // Автопереключение слайдов по умолчанию выключено(False)
+    this.keyDown = keydown; // Переключение слайдов на клавиатуре по умолчанию включено(true)
+    this.paused = null;
 
     if (this.slideIndex === slideIndex) {
       this.slideIndex2 =
         this.slides.length - (slideIndex + 1); // Задаём индекс первого слайда по умолчанию 0 (первый слайд)
     }
+
+    this.style = window.getComputedStyle(this.slides[0]);
+
+    // console.log(this.style.transition);
+    // console.log(this.style.transform);
+    // console.log(this.style.animationDuration);
   }
 
   showSlide() {
-    // if (this.count == 2) {
-    //   if (this.slideIndex - 1 < 0) {
-    //     this.slideIndex = this.slides.length - 2;
-    //     this.slideIndex2 = 1;
-    //   }
-    // } else {
     if (this.slideIndex < 0) {
       this.slideIndex = this.slides.length - 1;
       this.slideIndex2 = 0;
     }
-    // }
-
-    // if (this.count === 2) {
-    //   if (this.slideIndex + 1 > this.slides.length - 1) {
-    //     this.slideIndex = 1;
-    //     this.slideIndex2 = this.slides2.length - 2;
-    //   }
-    // } else {
     if (this.slideIndex > this.slides.length - 1) {
       this.slideIndex = 0;
       this.slideIndex2 = this.slides2.length - 1;
     }
-    // }
 
     for (let i = 0; i < this.slides.length; i++) {
       this.slides[
@@ -86,108 +80,43 @@ class Slider {
     }
 
     if (this.slideIndex === this.slides.length - 1) {
-      // this.slideIndex2 === 0
       this.slides[0].style.transform = `translate${this.direction}(-100%)`;
-      // this.slides[1].style.transform = `translate${this.direction}(-200%)`;
-
       this.slides2[
         this.slideIndex2 + 1
       ].style.transform = `translate${this.direction}(-100%)`;
-      // this.slides2[
-      // this.slideIndex2 + 2
-      // ].style.transform = `translate${this.direction}(-200%)`;
       //
       this.slides[
         this.slideIndex - 1
       ].style.transform = `translate${this.direction}(100%)`;
-      // this.slides[
-      // this.slideIndex - 2
-      // ].style.transform = `translate${this.direction}(200%)`;
-
       this.slides2[
         this.slides2.length - 1
       ].style.transform = `translate${this.direction}(100%)`;
-      // this.slides2[
-      // this.slides2.length - 2
-      // ].style.transform = `translate${this.direction}(200%)`;
-      //
     } else if (this.slideIndex === 0) {
-      // this.slideIndex2 === this.slides.length - 1
       this.slides[
         this.slideIndex + 1
       ].style.transform = `translate${this.direction}(-100%)`;
-      // this.slides[
-      // this.slideIndex + 2
-      // ].style.transform = `translate${this.direction}(-200%)`;
-
       this.slides2[0].style.transform = `translate${this.direction}(-100%)`;
-      // this.slides2[1].style.transform = `translate${this.direction}(-200%)`;
       //
       this.slides[
         this.slides.length - 1
       ].style.transform = `translate${this.direction}(100%)`;
-      // this.slides[
-      // this.slides.length - 2
-      // ].style.transform = `translate${this.direction}(200%)`;
-
       this.slides2[
         this.slideIndex2 - 1
       ].style.transform = `translate${this.direction}(100%)`;
-      // this.slides2[
-      // this.slideIndex2 - 2
-      // ].style.transform = `translate${this.direction}(200%)`;
-      //
     } else {
       this.slides[
         this.slideIndex + 1
       ].style.transform = `translate${this.direction}(-100%)`;
-      // if (this.slideIndex + 1 === this.slides.length - 1) {
-      // this.slides[0].style.transform = `translate${this.direction}(-200%)`;
-      // } else {
-      // this.slides[
-      // this.slideIndex + 2
-      // ].style.transform = `translate${this.direction}(-200%)`;
-      // }
-
       this.slides2[
         this.slideIndex2 + 1
       ].style.transform = `translate${this.direction}(-100%)`;
-      // if (
-      // this.slideIndex2 + 1 ===
-      // this.slides2.length - 1
-      // ) {
-      // this.slides2[0].style.transform = `translate${this.direction}(-200%)`;
-      // } else {
-      // this.slides2[
-      // this.slideIndex2 + 2
-      // ].style.transform = `translate${this.direction}(-200%)`;
-      // }
       //
       this.slides[
         this.slideIndex - 1
       ].style.transform = `translate${this.direction}(100%)`;
-      // if (this.slideIndex - 1 === 0) {
-      // this.slides[
-      // this.slides.length - 1
-      // ].style.transform = `translate${this.direction}(200%)`;
-      // } else {
-      // this.slides[
-      // this.slideIndex - 2
-      // ].style.transform = `translate${this.direction}(200%)`;
-      // }
-
       this.slides2[
         this.slideIndex2 - 1
       ].style.transform = `translate${this.direction}(100%)`;
-      // if (this.slideIndex2 - 1 === 0) {
-      // this.slides2[
-      // this.slides2.length - 1
-      // ].style.transform = `translate${this.direction}(200%)`;
-      // } else {
-      // this.slides2[
-      // this.slideIndex2 - 2
-      // ].style.transform = `translate${this.direction}(200%)`;
-      // }
     }
 
     this.slides[this.slideIndex].style.zIndex = 10;
@@ -262,7 +191,7 @@ class Slider {
       this.prev.setAttribute("disabled", "disabled");
       setTimeout(() => {
         this.prev.removeAttribute("disabled");
-      }, this.transform);
+      }, this.transition);
     }
   }
 
@@ -272,46 +201,85 @@ class Slider {
       this.next.setAttribute("disabled", "disabled");
       setTimeout(() => {
         this.next.removeAttribute("disabled");
-      }, this.transform);
+      }, this.transition);
     }
   }
 
+  // Переключения слайдов на клавиатуре - назад и вперед
   keydown() {
-    document.addEventListener("keydown", (event) => {
-      if (event.key == "ArrowUp" || event.key == "w") {
-        this.disabledUp();
-      } else if (
-        event.key == "ArrowDown" ||
-        event.key == "s"
-      ) {
-        this.disabledDown();
-      }
-    });
+    if (this.keyDown) {
+      document.addEventListener("keydown", (event) => {
+        if (this.direction === "Y") {
+          if (event.key == "ArrowUp" || event.key == "w") {
+            this.disabledUp();
+          } else if (
+            event.key == "ArrowDown" ||
+            event.key == "s"
+          ) {
+            this.disabledDown();
+          }
+        } else {
+          if (
+            event.key == "ArrowLeft" ||
+            event.key == "a"
+          ) {
+            this.disabledUp();
+          } else if (
+            event.key == "ArrowRight" ||
+            event.key == "d"
+          ) {
+            this.disabledDown();
+          }
+        }
+      });
+    }
   }
 
+  // Кнопка переключения слайдов - назад
   prevSlide() {
     this.prev.addEventListener("click", () => {
       this.disabledUp();
     });
   }
 
+  // Кнопка переключения слайдов - вперед
   nextSlide() {
     this.next.addEventListener("click", () => {
       this.disabledDown();
     });
   }
 
+  // Авто переключение слайдов
   autoplay() {
+    this.paused = setInterval(() => {
+      this.disabledDown();
+    }, this.autoPlay);
+  }
+
+  // включение и выключение авто переключения слайдов
+  activateAutoplay() {
     if (this.play) {
-      setInterval(() => {
-        this.disabledDown();
-      }, this.autoPlay);
+      this.autoplay();
+
+      this.slidesContainer.parentNode.addEventListener(
+        "mouseover",
+        () => {
+          clearInterval(this.paused);
+        }
+      );
+
+      this.slidesContainer.parentNode.addEventListener(
+        "mouseout",
+        () => {
+          this.autoplay();
+        }
+      );
     }
   }
 
   render() {
     this.showSlide();
-    this.autoplay();
+    this.activateAutoplay();
     this.prevSlide();
     this.nextSlide();
     this.keydown();
@@ -324,10 +292,10 @@ const slider = new Slider({
   slidesContainer: ".main-slide",
   slidesContainer2: ".sidebar",
   slideIndex: 2,
-  count: 2,
-  transform: 500,
-  // direction: "X",
-  autoPlay: 10000,
-  // play: "true",
+  transition: 500,
+  direction: "Y",
+  // autoPlay: 10000,
+  play: true,
+  keydown: false,
 });
 slider.render();
