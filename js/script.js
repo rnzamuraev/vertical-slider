@@ -300,7 +300,7 @@ const slider = new Slider({
   next: ".down-button",
   slidesContainer: ".main-slide",
   slidesContainer2: ".sidebar",
-  slideIndex: 2,
+  // slideIndex: 2,
   transition: 500,
   direction: "Y",
   direction2: "Y",
@@ -309,3 +309,4 @@ const slider = new Slider({
   keydown: true,
   slideParallel: false,
 });
+slider.render();
