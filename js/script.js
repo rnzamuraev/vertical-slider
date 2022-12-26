@@ -10,9 +10,11 @@ class Slider {
     slideIndex = 0,
     transition = null,
     direction = "Y",
+    direction2 = "X",
     autoPlay = 5000,
     play = false,
     keydown = true,
+    slideParallel = false,
   } = {}) {
     if (slidesContainer === null) {
       // Если был задан только класс сдайдов
@@ -44,13 +46,21 @@ class Slider {
     this.play = play; // Автопереключение слайдов по умолчанию выключено(False)
     this.keyDown = keydown; // Переключение слайдов на клавиатуре по умолчанию включено(true)
     this.paused = null;
+    this.slideParallel = slideParallel; // Задаем направление второму слайдеру
+    this.direction2 = direction2;
 
-    if (this.slideIndex === slideIndex) {
-      this.slideIndex2 =
-        this.slides.length - (slideIndex + 1); // Задаём индекс первого слайда по умолчанию 0 (первый слайд)
+    this.slideIndex2 =
+      this.slides.length - (slideIndex + 1); // Задаём индекс первого слайда по умолчанию 0 (первый слайд)
+
+    this.a = "";
+    this.b = "-";
+
+    if (this.slideParallel) {
+      this.a = "-";
+      this.b = "";
     }
 
-    this.style = window.getComputedStyle(this.slides[0]);
+    // this.style = window.getComputedStyle(this.slides[0]);
 
     // console.log(this.style.transition);
     // console.log(this.style.transform);
@@ -83,40 +93,40 @@ class Slider {
       this.slides[0].style.transform = `translate${this.direction}(-100%)`;
       this.slides2[
         this.slideIndex2 + 1
-      ].style.transform = `translate${this.direction}(-100%)`;
+      ].style.transform = `translate${this.direction2}(${this.b}100%)`;
       //
       this.slides[
         this.slideIndex - 1
       ].style.transform = `translate${this.direction}(100%)`;
       this.slides2[
         this.slides2.length - 1
-      ].style.transform = `translate${this.direction}(100%)`;
+      ].style.transform = `translate${this.direction2}(${this.a}100%)`;
     } else if (this.slideIndex === 0) {
       this.slides[
         this.slideIndex + 1
       ].style.transform = `translate${this.direction}(-100%)`;
-      this.slides2[0].style.transform = `translate${this.direction}(-100%)`;
+      this.slides2[0].style.transform = `translate${this.direction2}(${this.b}100%)`;
       //
       this.slides[
         this.slides.length - 1
       ].style.transform = `translate${this.direction}(100%)`;
       this.slides2[
         this.slideIndex2 - 1
-      ].style.transform = `translate${this.direction}(100%)`;
+      ].style.transform = `translate${this.direction2}(${this.a}100%)`;
     } else {
       this.slides[
         this.slideIndex + 1
       ].style.transform = `translate${this.direction}(-100%)`;
       this.slides2[
         this.slideIndex2 + 1
-      ].style.transform = `translate${this.direction}(-100%)`;
+      ].style.transform = `translate${this.direction2}(${this.b}100%)`;
       //
       this.slides[
         this.slideIndex - 1
       ].style.transform = `translate${this.direction}(100%)`;
       this.slides2[
         this.slideIndex2 - 1
-      ].style.transform = `translate${this.direction}(100%)`;
+      ].style.transform = `translate${this.direction2}(${this.a}100%)`;
     }
 
     this.slides[this.slideIndex].style.zIndex = 10;
@@ -293,9 +303,11 @@ const slider = new Slider({
   slidesContainer2: ".sidebar",
   slideIndex: 2,
   transition: 500,
-  direction: "Y",
-  // autoPlay: 10000,
+  direction: "X",
+  direction2: "Y",
+  // autoPlay: 5000,
   play: true,
   keydown: false,
+  slideParallel: true,
 });
 slider.render();
