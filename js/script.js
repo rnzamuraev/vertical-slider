@@ -261,34 +261,33 @@ class Slider {
 
   // Авто переключение слайдов
   autoplay() {
-    this.paused = setInterval(() => {
-      this.disabledDown();
-    }, this.autoPlay);
+    if (this.play) {
+      this.paused = setInterval(() => {
+        this.disabledDown();
+      }, this.autoPlay);
+    }
   }
 
   // включение и выключение авто переключения слайдов
   activateAutoplay() {
-    if (this.play) {
-      this.autoplay();
+    this.slidesContainer.parentNode.addEventListener(
+      "mouseover",
+      () => {
+        clearInterval(this.paused);
+      }
+    );
 
-      this.slidesContainer.parentNode.addEventListener(
-        "mouseover",
-        () => {
-          clearInterval(this.paused);
-        }
-      );
-
-      this.slidesContainer.parentNode.addEventListener(
-        "mouseout",
-        () => {
-          this.autoplay();
-        }
-      );
-    }
+    this.slidesContainer.parentNode.addEventListener(
+      "mouseout",
+      () => {
+        this.autoplay();
+      }
+    );
   }
 
   render() {
     this.showSlide();
+    this.autoplay();
     this.activateAutoplay();
     this.prevSlide();
     this.nextSlide();
@@ -303,11 +302,11 @@ const slider = new Slider({
   slidesContainer2: ".sidebar",
   slideIndex: 2,
   transition: 500,
-  direction: "X",
+  direction: "Y",
   direction2: "Y",
-  // autoPlay: 5000,
+  autoPlay: 1000,
   play: true,
   keydown: false,
-  slideParallel: true,
+  slideParallel: false,
 });
 slider.render();
