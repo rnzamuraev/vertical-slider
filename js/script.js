@@ -304,9 +304,8 @@ const slider = new Slider({
   transition: 500,
   direction: "Y",
   direction2: "Y",
-  autoPlay: 1000,
+  // autoPlay: 10000,
   play: true,
-  keydown: false,
+  keydown: true,
   slideParallel: false,
 });
-slider.render();
